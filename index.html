@@ -3,34 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️ مفاجأة خاصة ❤️</title>
+    <title>❤️ رحلة المفاجأة ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
-        body { background: linear-gradient(135deg, #0f0f0f, #1a1a1a); color: white; overflow: hidden; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .container { max-width: 500px; width: 90%; z-index: 10; transition: all 0.5s ease; position: absolute; }
+        body { background: linear-gradient(135deg, #0a0a0a, #151515); color: white; overflow: hidden; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .container { max-width: 500px; width: 90%; z-index: 10; transition: all 0.5s ease; position: absolute; padding: 20px; }
         .hidden { display: none !important; opacity: 0; transform: scale(0.8); }
-        .visible { display: block !important; opacity: 1; transform: scale(1); animation: zoomIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+        .visible { display: block !important; opacity: 1; transform: scale(1); animation: popIn 0.5s forwards; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
-        h1 { font-size: 38px; color: #dda7a2; margin-bottom: 20px; text-shadow: 0 0 15px rgba(221, 167, 162, 0.3); }
-        p { font-size: 20px; line-height: 1.6; color: #f0f0f0; margin-bottom: 30px; }
+        h1 { font-size: 35px; color: #dda7a2; margin-bottom: 20px; text-shadow: 0 0 15px rgba(221, 167, 162, 0.3); }
+        p { font-size: 19px; line-height: 1.6; color: #f0f0f0; margin-bottom: 25px; }
         
-        .btn { background: #dda7a2; color: #000; border: none; padding: 15px 35px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 20px rgba(221, 167, 162, 0.3); transition: 0.3s; }
+        .btn { background: #dda7a2; color: #000; border: none; padding: 14px 35px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 20px rgba(221, 167, 162, 0.3); transition: 0.2s; margin-top: 10px; display: inline-block; }
         .btn:active { transform: scale(0.95); }
 
+        /* الأزرار العمودية للأسئلة */
+        .quiz-btn { background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid #dda7a2; display: block; width: 100%; margin-bottom: 12px; border-radius: 15px; padding: 15px; font-size: 17px; text-align: right; cursor: pointer; transition: 0.3s; }
+        .quiz-btn:hover { background: rgba(221, 167, 162, 0.1); }
+
         /* ستايل اللعبة */
-        #game-heart { font-size: 60px; cursor: pointer; position: absolute; transition: all 0.4s ease; user-select: none; z-index: 100; filter: drop-shadow(0 0 10px red); }
+        #game-heart { font-size: 60px; cursor: pointer; position: absolute; transition: all 0.3s ease; user-select: none; z-index: 100; filter: drop-shadow(0 0 10px red); }
         
         /* ستايل الخيارات */
-        .choice-container { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
-        .choice-box { background: rgba(255, 255, 255, 0.05); border: 2px solid #dda7a2; padding: 30px 20px; border-radius: 20px; flex: 1; cursor: pointer; transition: 0.3s; }
+        .choice-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .choice-box { background: rgba(255, 255, 255, 0.03); border: 2px solid #dda7a2; padding: 25px 15px; border-radius: 20px; flex: 1; cursor: pointer; transition: 0.3s; }
         .choice-box:hover { background: rgba(221, 167, 162, 0.1); transform: translateY(-5px); }
-        .choice-box i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .choice-box span { font-size: 35px; display: block; margin-bottom: 10px; }
+
+        /* العداد التنازلي */
+        .countdown { display: flex; justify-content: center; gap: 10px; margin: 25px 0; }
+        .time-box { background: rgba(26, 26, 26, 0.8); border: 1px solid #444; border-radius: 12px; padding: 12px; min-width: 70px; backdrop-filter: blur(5px); }
+        .time-box span { display: block; font-size: 24px; font-weight: bold; color: #dda7a2; }
+        .time-box label { font-size: 11px; color: #aaa; }
 
         .hearts-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .heart-fall { position: absolute; color: rgba(255, 0, 0, 0.3); animation: fall linear infinite; }
+        .heart-fall { position: absolute; color: rgba(255, 0, 0, 0.2); animation: fall linear infinite; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
+        
+        .rules-box { background: rgba(255, 255, 255, 0.02); border-right: 4px solid #dda7a2; padding: 15px; border-radius: 8px; text-align: right; margin-top: 20px; }
+        .rules-box li { font-size: 14px; margin-bottom: 6px; color: #ccc; list-style: none; }
     </style>
 </head>
 <body>
@@ -39,61 +52,91 @@
     <div class="hearts-bg" id="hearts-container"></div>
 
     <div class="container visible" id="step-1">
-        <h1>هناك شيء مخفي لكِ.. 🗝️</h1>
-        <p>تم تجهيز هذه الصفحة خصيصاً لتأخذكِ في رحلة قصيرة.<br>هل أنتِ جاهزة لاكتشاف ما بداخلها؟</p>
-        <button class="btn" onclick="goToStep(2)">أنا مستعدة جداً! ✨</button>
+        <h1>نظام كشف الروتين.. 🔒</h1>
+        <p>تم رصد مؤشرات ضغوطات عالية وضغط روتيني بالمنزل! 📉<br>يتطلب النظام الآن فك الشفرة لإعادة التوازن..</p>
+        <button class="btn" onclick="goToStep(2)">بدء فك الشفرة 🗝️</button>
     </div>
 
     <div class="container hidden" id="step-2">
-        <h1>أمسكي القلب! ❤️</h1>
-        <p id="game-status">اضغطي على القلب 3 مرات لتفتحي الصندوق السحري..</p>
+        <h1>المرحلة الأولى: فك القفل 🎯</h1>
+        <p id="game-status">امسكي القلب المتحرك 3 مرات متتالية لفتح لوحة التحكم..</p>
         <div id="game-heart" onclick="catchHeart()">❤️</div>
     </div>
 
     <div class="container hidden" id="step-3">
-        <h1>وش تتوقعين المفاجأة؟ 👀</h1>
-        <p>اختاري الصندوق الذي يميل له قلبكِ..</p>
+        <h1>المرحلة الثانية: التحقق الأمني 🤔</h1>
+        <p>ما هي العبارة الأكثر تكراراً في البيت يومياً؟</p>
+        <button class="quiz-btn" onclick="goToStep(4)">1️⃣ "وش الغدا اليوم؟" 🍲</button>
+        <button class="quiz-btn" onclick="goToStep(4)">2️⃣ "فيصل.. اترك أختك رتيل!" 👶👧</button>
+        <button class="quiz-btn" onclick="goToStep(4)">3️⃣ "أنا تعبانة وضغط البيت عالي" 💔</button>
+    </div>
+
+    <div class="container hidden" id="step-4">
+        <h1>المرحلة الثالثة: اختيار المسار 🧭</h1>
+        <p>النظام يخيركِ بين مسارين.. اختاري بحكمة:</p>
         <div class="choice-container">
-            <div class="choice-box" onclick="goToStep(4)">
-                <span>🎁</span><br>هدية مادية فخمة
+            <div class="choice-box" onclick="goToStep(5)">
+                <span>🌌</span><br>بوابة الهروب المؤقت
             </div>
-            <div class="choice-box" onclick="goToStep(4)">
-                <span>🏡</span><br>وقت من الروقان
+            <div class="choice-box" onclick="goToStep(5)">
+                <span>🤫</span><br>بوابة المفاجأة الكبرى
             </div>
         </div>
     </div>
 
-    <div class="container hidden" id="step-4">
-        <h1>المفاجأة هي.. شاليه! 🏡✨</h1>
-        <p>لا هدايا مادية تضاهي راحة بالكِ..<br>تم اختيار شاليه هادئ وفخم لنقضي فيه يوماً بعيداً عن صخب العالم وكل الضغوطات.<br><br><b>يوم الروقان العالمي لإيلاف ❤️</b></p>
-        <button class="btn" onclick="goToStep(5)">موافقة على هذا الدلال؟ 😍</button>
+    <div class="container hidden" id="step-5">
+        <h1>تم اختراق الروتين بنجاح! 🎉</h1>
+        <p>المفاجأة الحقيقية هي: <br><br><b>شاليه خاص فخم، هدوء تام، وروقان كامل! 🏡✨</b><br><br>يوم مخصص لكِ بالكامل بعيداً عن صخب العالم والتزامات المنزل.</p>
+        <button class="btn" onclick="goToStep(6)">متى هذا اليوم؟ 👀</button>
     </div>
 
-    <div class="container hidden" id="step-5">
-        <h1>تم تثبيت الموعد! 🎉❤️</h1>
-        <p>من هالحظة، ممنوع التفكير في أي شيء يخص البيت.. <br>فقط استعدي لليوم المنتظر.<br><br><b>أحبكِ جداً يا أغلى ما عندي.</b></p>
-        <button class="btn" onclick="finalCelebrate()">موافقة وبقوة! 🔥</button>
+    <div class="container hidden" id="step-6">
+        <h1>الوقت المتبقي ⏳</h1>
+        <p>باقي على انطلاق رحلة الدلال والروقان التام:</p>
+        <div class="countdown">
+            <div class="time-box"><span id="days">00</span><label>يوم</label></div>
+            <div class="time-box"><span id="hours">00</span><label>ساعة</label></div>
+            <div class="time-box"><span id="minutes">00</span><label>دقيقة</label></div>
+            <div class="time-box"><span id="seconds">00</span><label>ثانية</label></div>
+        </div>
+        <button class="btn" onclick="goToStep(7)">الانتقال للشروط والأحكام 📜</button>
+    </div>
+
+    <div class="container hidden" id="step-7">
+        <h1>وثيقة عهد الروقان 📜</h1>
+        <p>الموافقة تعني الالتزام التام بالآتي:</p>
+        <div class="rules-box">
+            <ul>
+                <li>📍 يمنع منعاً باتاً التفكير في أي شغل يخص البيت.</li>
+                <li>📍 إلزامية جلب الابتسامه والروقان العالي.</li>
+                <li>📍 أي محاولة لذكر "طلبات البيت" تعتبر مخالفة رومانسية صريحة!</li>
+            </ul>
+        </div>
+        <button class="btn" onclick="goToStep(8)">أبصم بالعشرة وموافقة! ✍️❤️</button>
+    </div>
+
+    <div class="container hidden" id="step-8">
+        <h1>تم تفعيل يوم الروقان! 😍🎉</h1>
+        <p>تم ترتيب وتخطيط كل شيء بحب وعناية لأجلكِ.. <br><br><b>أحبكِ جداً يا أغلى ما عندي في الكون. ❤️</b></p>
+        <button class="btn" onclick="finalCelebrate()">تأكيد الحضور وبدء الحفلة! 🔥</button>
     </div>
 
     <script>
         let clicks = 0;
+        const targetDate = new Date("June 22, 2026 16:00:00").getTime();
 
         function goToStep(num) {
             document.querySelectorAll('.container').forEach(c => c.classList.replace('visible', 'hidden'));
             document.getElementById('step-' + num).classList.replace('hidden', 'visible');
-            
-            if(num === 2) { moveHeart(); }
+            if(num === 2) moveHeart();
         }
 
-        // دالة اللعبة
         function catchHeart() {
             clicks++;
             const status = document.getElementById('game-status');
             const heart = document.getElementById('game-heart');
-            
-            if (clicks === 1) status.innerText = "كفو! باقي مرتين..";
-            if (clicks === 2) status.innerText = "قربتي جداً.. آخر مرة!";
-            
+            if (clicks === 1) status.innerText = "جميل! باقي مرتين..";
+            if (clicks === 2) status.innerText = "قربتِ جداً.. آخر ضغطة!";
             if (clicks >= 3) {
                 heart.style.display = 'none';
                 goToStep(3);
@@ -104,37 +147,58 @@
 
         function moveHeart() {
             const heart = document.getElementById('game-heart');
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 100);
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
+            const x = Math.random() * (window.innerWidth - 80);
+            const y = Math.random() * (window.innerHeight - 80);
+            heart.style.left = Math.max(20, x) + 'px';
+            heart.style.top = Math.max(20, y) + 'px';
         }
 
-        // الاحتفال النهائي وتشغيل الصوت
+        // تحديث العداد
+        const timer = setInterval(function() {
+            try {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+                document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.querySelector(".countdown").innerHTML = "<p>حان الوقت المنتظر! 🎉</p>";
+                }
+            } catch (e) {}
+        }, 1000);
+
+        // الاحتفال وتشغيل الأغنية بالثانية 65
         function finalCelebrate() {
             const audio = document.getElementById('bg-music');
             if(audio) {
                 try {
                     audio.currentTime = 65; // كوبليه حبك رزق
-                    audio.play();
+                    audio.play().catch(e => audio.play());
                 } catch(e) { audio.play(); }
             }
 
             var duration = 6 * 1000;
             var end = Date.now() + duration;
-
             (function frame() {
-                confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
-                confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
+                confetti({ particleCount: 6, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
+                confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
 
-            alert("كفووو! 🔥 تم تفعيل يوم الروقان بنجاح، الوعد بالشاليه إن شاء الله! 😉❤️");
+            alert("كفووو! 🔥 تم تسجيل حضورك بنجاح، وممنوع التراجع. الوعد بالشاليه إن شاء الله! 😉❤️");
         }
 
-        // تأثير القلوب الخلفية
+        // قلوب خلفية لطيفة
         const heartsContainer = document.getElementById('hearts-container');
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 15; i++) {
             let h = document.createElement('div');
             h.classList.add('heart-fall');
             h.innerText = '❤️';
