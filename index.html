@@ -21,7 +21,7 @@
         .time-box { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 15px; min-width: 75px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .time-box span { display: block; font-size: 26px; font-weight: bold; color: #dda7a2; }
         .time-box label { font-size: 12px; color: #aaa; margin-top: 5px; display: block; }
-        .btn { background: #dda7a2; color: #000; border: none; padding: 15px 40px; font-size: 20px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(213, 167, 162, 0.4); transition: transform 0.2s, background 0.3s; text-decoration: none; display: inline-block; }
+        .btn { background: #dda7a2; color: #000; border: none; padding: 15px 40px; font-size: 20px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(213, 167, 162, 0.4); transition: transform 0.2s, background 0.3s; text-decoration: none; display: inline-block; z-index: 10; position: relative; }
         .btn:hover { transform: scale(1.05); background: #eec2be; }
         .footer-text { margin-top: 35px; font-size: 18px; line-height: 1.6; color: #fff; }
         #secret-card { opacity: 0; transform: scale(0.9); transition: all 0.8s ease-in-out; }
@@ -37,6 +37,7 @@
 <body>
 
     <audio id="bg-music" src="music.m4a" preload="auto" loop></audio>
+    
     <div class="hearts-bg" id="hearts-container"></div>
 
     <div class="container" id="main-card">
@@ -73,7 +74,7 @@
     </div>
 
     <script>
-        // ضبط تاريخ العداد المتوافق مع اللقطة
+        // العداد مضبوط لتاريخ هدف مستقبلي متوافق مع لقطة الجوال
         const targetDate = new Date("June 21, 2026 16:00:00").getTime();
 
         const timer = setInterval(function() {
@@ -95,7 +96,7 @@
             }
         }, 1000);
 
-        // توليد تأثير القلوب
+        // تأثير القلوب المتساقطة
         const container = document.getElementById('hearts-container');
         const heartSymbols = ['❤️', '💖', '💝', '💕'];
         for (let i = 0; i < 25; i++) {
@@ -109,4 +110,49 @@
             container.appendChild(heart);
         }
 
-        // تفعيل بيئة الصوت إجبارياً مع أول تفاعل للمستخدم
+        function openInvitation() {
+            const mainCard = document.getElementById('main-card');
+            const secretCard = document.getElementById('secret-card');
+            const audio = document.getElementById('bg-music');
+
+            if(audio) {
+                audio.currentTime = 65; // الانتقال لكوبليه "حبك رزق" عند الثانية 65 تلقائياً
+                audio.play().catch(function(error) {
+                    console.log("المتصفح حجب الصوت، محاولة تشغيل بدون تحديد وقت البدء:", error);
+                    audio.play();
+                });
+            }
+
+            mainCard.classList.add('fade-out');
+            setTimeout(() => {
+                mainCard.classList.add('hidden');
+                secretCard.classList.remove('hidden');
+                setTimeout(() => { secretCard.classList.add('show'); }, 50);
+            }, 800);
+        }
+
+        const escapeBtn = document.getElementById('btn-escape');
+        function moveButton() {
+            const area = document.getElementById('action-area');
+            const maxX = area.clientWidth - escapeBtn.clientWidth;
+            const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
+            const randomY = Math.floor(Math.random() * 150) - 40;
+            escapeBtn.style.left = randomX + 'px';
+            escapeBtn.style.top = randomY + 'px';
+        }
+        escapeBtn.addEventListener('mouseenter', moveButton);
+        escapeBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+
+        function celebrate() {
+            var duration = 4 * 1000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+            alert("كفووو! 🔥 تم تسجيل حضورك بنجاح، وممنوع التراجع. الوعد بالشاليه إن شاء الله! 😉❤️");
+        }
+    </script>
+</body>
+</html>
