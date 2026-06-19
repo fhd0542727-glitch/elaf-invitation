@@ -38,7 +38,6 @@
 
     <audio id="bg-music" preload="auto" loop>
         <source src="music.m4a.mp4" type="audio/mp4">
-        <source src="music.m4a" type="audio/mp4">
     </audio>
     
     <div class="hearts-bg" id="hearts-container"></div>
@@ -77,29 +76,29 @@
     </div>
 
     <script>
-        // العداد التنازلي المضمون
         const targetDate = new Date("June 22, 2026 16:00:00").getTime();
 
         const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            try {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
-            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+                document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+                document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
 
-            if (distance < 0) {
-                clearInterval(timer);
-                document.querySelector(".countdown").innerHTML = "<p style='font-size:24px; color:#dda7a2;'>حان الوقت المنتظر! 🎉</p>";
-            }
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.querySelector(".countdown").innerHTML = "<p style='font-size:24px; color:#dda7a2;'>حان الوقت المنتظر! 🎉</p>";
+                }
+            } catch (e) { console.log("خطأ في العداد:", e); }
         }, 1000);
 
-        // القلوب المتساقطة
         const container = document.getElementById('hearts-container');
         const heartSymbols = ['❤️', '💖', '💝', '💕'];
         for (let i = 0; i < 25; i++) {
@@ -113,19 +112,27 @@
             container.appendChild(heart);
         }
 
-        // تشغيل مباشر وبسيط عند الضغط على الزر
         function openInvitation() {
             const mainCard = document.getElementById('main-card');
             const secretCard = document.getElementById('secret-card');
             const audio = document.getElementById('bg-music');
 
+            mainCard.classList.add('fade-out');
+            
+            // تشغيل الصوت بطريقة معزولة وآمنة حتى لو تأخر تحميل السيرفر
             if(audio) {
-                audio.play().catch(function(error) {
-                    console.log("المتصفح حجب الصوت:", error);
-                });
+                try {
+                    audio.currentTime = 65; // القفز لكوبليه "حبك رزق"
+                    audio.play().catch(function(err) {
+                        console.log("المتصفح طلب تفاعل مباشر إضافي:");
+                        audio.play();
+                    });
+                } catch(e) {
+                    console.log("تأخر استجابة الملف، جاري المحاولة العادية:", e);
+                    audio.play();
+                }
             }
 
-            mainCard.classList.add('fade-out');
             setTimeout(() => {
                 mainCard.classList.add('hidden');
                 secretCard.classList.remove('hidden');
