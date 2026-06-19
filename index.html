@@ -205,7 +205,7 @@
 </head>
 <body>
 
-    <audio id="bg-music" src="music.m4a.mp4" loop></audio>
+    <audio id="bg-music" src="music.m4a" loop></audio>
 
     <div class="hearts-bg" id="hearts-container"></div>
 
@@ -249,7 +249,7 @@
     </div>
 
     <script>
-        // 1. نظام العداد التنازلي المحدث بدقة (مضبوط لتاريخ 22 يونيو)
+        // 1. نظام العداد التنازلي المحدث بدقة
         const targetDate = new Date("June 22, 2026 16:00:00").getTime();
 
         const timer = setInterval(function() {
@@ -286,13 +286,13 @@
             container.appendChild(heart);
         }
 
-        // 3. الانتقال السلس للواجهة السرية وتشغيل الصوت من مقطع "حبك رزق"
+        // 3. الانتقال السلس للواجهة السرية وتشغيل الصوت فوراً من المقطع الحماسي
         function openInvitation() {
             const mainCard = document.getElementById('main-card');
             const secretCard = document.getElementById('secret-card');
             const audio = document.getElementById('bg-music');
 
-            // تشغيل الأغنية والقفز للثانية 65 مباشرة (بداية المقطع الحماسي)
+            // تشغيل الأغنية والقفز للثانية 65 مباشرة (بداية كوبليه "حبك رزق")
             if(audio) {
                 audio.currentTime = 65; 
                 audio.play().catch(error => {
