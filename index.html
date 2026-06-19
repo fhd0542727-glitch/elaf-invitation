@@ -36,7 +36,7 @@
 </head>
 <body>
 
-    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
+    <audio id="bg-music" src="music.m4a.mp4" preload="auto" loop></audio>
     
     <div class="hearts-bg" id="hearts-container"></div>
 
@@ -119,13 +119,13 @@
             
             if(audio) {
                 try {
-                    audio.currentTime = 65; // القفز للثانية 65 مباشرة
+                    audio.currentTime = 65; // القفز المباشر للثانية 65 (المقطع المتفق عليه)
                     audio.play().catch(function(err) {
-                        console.log("المتصفح حجب التشغيل المباشر، جاري إعادة المحاولة:");
+                        console.log("المتصفح طلب تفاعل مباشر إضافي:");
                         audio.play();
                     });
                 } catch(e) {
-                    console.log("خطأ في القفز للتوقيت، تشغيل عادي:", e);
+                    console.log("تأخر استجابة الملف، جاري المحاولة العادية:", e);
                     audio.play();
                 }
             }
