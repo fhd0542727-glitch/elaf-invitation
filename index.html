@@ -36,7 +36,7 @@
 </head>
 <body>
 
-    <audio id="bg-music" src="https://fhd0542727-glitch.github.io/elaf-invitation/music.m4a" loop preload="auto"></audio>
+    <audio id="bg-music" src="music.m4a" preload="auto" loop></audio>
     <div class="hearts-bg" id="hearts-container"></div>
 
     <div class="container" id="main-card">
@@ -57,7 +57,7 @@
 
     <div class="container hidden" id="secret-card">
         <h1>المفاجأة المنتظرة! 😍</h1>
-        <p class="subtitle" style="margin-top: 15px;">تم التخطيط لكل شيء بعناية لتبتعدي عن روتين الضغوطات.. فهل أنتِ مستعدة?</p>
+        <p class="subtitle" style="margin-top: 15px;">تم التخطيط لكل شيء بعناية لتبتعدي عن روتين الضغوطات.. فهل أنتِ مستعدة؟</p>
         <div class="btn-group" id="action-area">
             <button class="btn" id="btn-accept" onclick="celebrate()">أكيد طبعاً جاهزة! 🔥</button>
             <button class="btn" id="btn-escape">بشوف جدولي 🙄</button>
@@ -73,7 +73,7 @@
     </div>
 
     <script>
-        // ضبط تاريخ العداد ليكون متوافقاً مع لقطة الجوال (2 يوم و 12 ساعة من الآن)
+        // ضبط تاريخ العداد المتوافق مع اللقطة
         const targetDate = new Date("June 21, 2026 16:00:00").getTime();
 
         const timer = setInterval(function() {
@@ -95,6 +95,7 @@
             }
         }, 1000);
 
+        // توليد تأثير القلوب
         const container = document.getElementById('hearts-container');
         const heartSymbols = ['❤️', '💖', '💝', '💕'];
         for (let i = 0; i < 25; i++) {
@@ -108,46 +109,4 @@
             container.appendChild(heart);
         }
 
-        function openInvitation() {
-            const mainCard = document.getElementById('main-card');
-            const secretCard = document.getElementById('secret-card');
-            const audio = document.getElementById('bg-music');
-
-            if(audio) {
-                audio.currentTime = 65; // الانتقال لكوبليه حبك رزق
-                audio.play().catch(error => { console.log("حجب التشغيل التلقائي:", error); });
-            }
-
-            mainCard.classList.add('fade-out');
-            setTimeout(() => {
-                mainCard.classList.add('hidden');
-                secretCard.classList.remove('hidden');
-                setTimeout(() => { secretCard.classList.add('show'); }, 50);
-            }, 800);
-        }
-
-        const escapeBtn = document.getElementById('btn-escape');
-        function moveButton() {
-            const area = document.getElementById('action-area');
-            const maxX = area.clientWidth - escapeBtn.clientWidth;
-            const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
-            const randomY = Math.floor(Math.random() * 150) - 40;
-            escapeBtn.style.left = randomX + 'px';
-            escapeBtn.style.top = randomY + 'px';
-        }
-        escapeBtn.addEventListener('mouseenter', moveButton);
-        escapeBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
-
-        function celebrate() {
-            var duration = 4 * 1000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#dda7a2', '#ffffff', '#ff0000'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
-            alert("كفووو! 🔥 تم تسجيل حضورك بنجاح، وممنوع التراجع. الوعد بالشاليه إن شاء الله! 😉❤️");
-        }
-    </script>
-</body>
-</html>
+        // تفعيل بيئة الصوت إجبارياً مع أول تفاعل للمستخدم
