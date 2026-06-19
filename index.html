@@ -205,6 +205,8 @@
 </head>
 <body>
 
+    <audio id="bg-music" src="music.m4a" loop></audio>
+
     <div class="hearts-bg" id="hearts-container"></div>
 
     <div class="container" id="main-card">
@@ -247,7 +249,7 @@
     </div>
 
     <script>
-        // 1. نظام العداد التنازلي المحدث (تعديل التاريخ هنا إذا حبيت)
+        // 1. نظام العداد التنازلي (تستطيع تغيير التاريخ هنا إذا حبيت)
         const targetDate = new Date("June 25, 2026 16:00:00").getTime();
 
         const timer = setInterval(function() {
@@ -270,7 +272,7 @@
             }
         }, 1000);
 
-        // 2. صناعة القلوب المتساقطة في الخلفية بشكل عشوائي رايق
+        // 2. صناعة القلوب المتساقطة في الخلفية بشكل عشوائي
         const container = document.getElementById('hearts-container');
         const heartSymbols = ['❤️', '💖', '💝', '💕'];
         for (let i = 0; i < 25; i++) {
@@ -284,10 +286,18 @@
             container.appendChild(heart);
         }
 
-        // 3. الانتقال السلس للواجهة السرية
+        // 3. الانتقال السلس للواجهة السرية وتشغيل الصوت فوراً
         function openInvitation() {
             const mainCard = document.getElementById('main-card');
             const secretCard = document.getElementById('secret-card');
+            const audio = document.getElementById('bg-music');
+
+            // تشغيل الأغنية
+            if(audio) {
+                audio.play().catch(error => {
+                    console.log("المتصفح حجب تشغيل الصوت تلقائياً:", error);
+                });
+            }
 
             mainCard.classList.add('fade-out');
             
@@ -304,10 +314,9 @@
         const escapeBtn = document.getElementById('btn-escape');
         
         function moveButton() {
-            // حساب حدود الحركة داخل منطقة الأزرار فقط عشان ما يخرج برا الشاشة
             const area = document.getElementById('action-area');
             const maxX = area.clientWidth - escapeBtn.clientWidth;
-            const maxY = 150; // مدى الهروب الرأسي
+            const maxY = 150;
 
             const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
             const randomY = Math.floor(Math.random() * maxY) - 40;
@@ -318,13 +327,12 @@
 
         escapeBtn.addEventListener('mouseenter', moveButton);
         escapeBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // يمنع الضغط باللمس على الجوال ويخليه يشرد فوراً
+            e.preventDefault(); // منع الضغط باللمس على الجوال ويخليه يشرد فوراً
             moveButton();
         });
 
         // 5. احتفالية الألعاب النارية والقلوب عند قبول الدعوة
         function celebrate() {
-            // إطلاق الألعاب النارية
             var duration = 4 * 1000;
             var end = Date.now() + duration;
 
