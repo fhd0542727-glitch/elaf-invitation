@@ -36,7 +36,12 @@
 </head>
 <body>
 
-    <audio id="bg-music" src="music.m4a" preload="auto" loop></audio>
+    <audio id="bg-music" preload="auto" loop>
+        <source src="music.m4a" type="audio/mp4">
+        <source src="Music.m4a" type="audio/mp4">
+        <source src="music.M4A" type="audio/mp4">
+        <source src="music.m4a.mp4" type="audio/mp4">
+    </audio>
     
     <div class="hearts-bg" id="hearts-container"></div>
 
@@ -74,8 +79,7 @@
     </div>
 
     <script>
-        // العداد مضبوط لتاريخ هدف مستقبلي متوافق مع لقطة الجوال
-        const targetDate = new Date("June 21, 2026 16:00:00").getTime();
+        const targetDate = new Date("June 22, 2026 16:00:00").getTime();
 
         const timer = setInterval(function() {
             const now = new Date().getTime();
@@ -96,7 +100,6 @@
             }
         }, 1000);
 
-        // تأثير القلوب المتساقطة
         const container = document.getElementById('hearts-container');
         const heartSymbols = ['❤️', '💖', '💝', '💕'];
         for (let i = 0; i < 25; i++) {
@@ -116,9 +119,10 @@
             const audio = document.getElementById('bg-music');
 
             if(audio) {
-                audio.currentTime = 65; // الانتقال لكوبليه "حبك رزق" عند الثانية 65 تلقائياً
+                // نخلي المتصفح يجهز الملف أولاً ثم يقفز للثانية 65
+                audio.currentTime = 65; 
                 audio.play().catch(function(error) {
-                    console.log("المتصفح حجب الصوت، محاولة تشغيل بدون تحديد وقت البدء:", error);
+                    console.log("محاولة تشغيل بديلة:", error);
                     audio.play();
                 });
             }
